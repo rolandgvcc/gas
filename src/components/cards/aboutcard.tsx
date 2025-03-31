@@ -12,20 +12,20 @@ export default function AboutCard() {
     <div className="max-w-xl mx-auto mt-10">
       <Card>
         <CardHeader>
-          <CardTitle>Next AI SDK Lite</CardTitle>
-          <CardDescription>A no bells or whistles AI starter kit</CardDescription>
+          <CardTitle>Dungeon Adventure</CardTitle>
+          <CardDescription>An AI-powered text adventure game</CardDescription>
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground/90 leading-normal prose"> 
-          <p className="mb-3">A simplified Next.js AI starter kit designed with simplicity and speed in mind.</p>
-          <p className="mb-3">Built with Next.js, AI SDK, Tailwind, Typescript and shadcn you can build a bare minimum AI Chatbot with only an environment variable. Based off the popular <Link href="https://chat.vercel.ai/">Next AI Chatbot</Link> the aim for this project is to remove any dependency outside of basic functionality and examples with an emphasis on making changes and experimenting with the AI SDK. </p>
-          <p className="mb-3 font-semibold">Big Opinions:</p>
+          <p className="mb-3">Embark on a thrilling journey through a mysterious dungeon filled with danger, treasures, and unexpected twists.</p>
+          <p className="mb-3">This text-based adventure game uses AI to create a unique experience every time you play. Your choices will determine your fate as you navigate through the dungeon's depths.</p>
+          <p className="mb-3 font-semibold">Game Features:</p>
           <ul className="flex flex-col mb-2">
-            <li>→ Speed to learning and experimenting AI SDK</li>
-            <li>→ App Router, Server Actions, React Server Components</li>
-            <li>→ No auth, storage or sharing</li>
-            <li></li>
+            <li>→ Dynamic storytelling that adapts to your choices</li>
+            <li>→ Multiple possible endings and outcomes</li>
+            <li>→ Dangers, treasures, and surprises await</li>
+            <li>→ Track your progress and see how far you can get</li>
           </ul>
-          <p><Link href="https://github.com/mattjared/nextjs-ai-lite" className="underline">Fork the repo and get hacking</Link> </p>
+          <p>Press "Begin Adventure" to start your journey into the unknown!</p>
         </CardContent>
       </Card>
     </div>
