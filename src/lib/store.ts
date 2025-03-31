@@ -1,41 +1,31 @@
 import { create } from 'zustand';
-import { type CoreMessage } from 'ai';
-import { type GameResponse, GameStateSchema, GameStatus } from '@/lib/schemas';
-
-// Define the store state type
-interface GameMessage extends CoreMessage {
-  imageUrl?: string;
-  imageData?: string;
-}
+import { 
+  AIMessage, 
+  GameStateType, 
+  GameResponseType, 
+  GameAction,
+} from './types';
 
 interface GameStore {
   // State
-  messages: GameMessage[];
+  messages: AIMessage[];
   input: string;
-  gameState: {
-    currentEpisode: number;
-    history: {
-      episode: number;
-      description: string;
-      action: string;
-    }[];
-    gameStatus: typeof GameStatus._type;
-  };
-  currentResponse: GameResponse | null;
+  gameState: GameStateType;
+  currentResponse: GameResponseType | null;
   isGameOver: boolean;
   isLoading: boolean;
 
   // Actions
   setInput: (input: string) => void;
-  setMessages: (messages: GameMessage[]) => void;
-  addMessage: (message: GameMessage) => void;
-  setCurrentResponse: (response: GameResponse | null) => void;
+  setMessages: (messages: AIMessage[]) => void;
+  addMessage: (message: AIMessage) => void;
+  setCurrentResponse: (response: GameResponseType | null) => void;
   setGameOver: (isOver: boolean) => void;
   setLoading: (loading: boolean) => void;
   resetGame: () => void;
   startGame: () => Promise<void>;
   handleUserInput: (input: string) => Promise<void>;
-  handleOptionSelect: (option: { id: string; action: string; gameStatus?: string }) => Promise<void>;
+  handleOptionSelect: (option: GameAction) => Promise<void>;
 }
 
 // Create the store
@@ -78,7 +68,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   // Complex actions
   startGame: async () => {
     try {
-      const newMessages: GameMessage[] = [
+      const newMessages: AIMessage[] = [
         { role: 'user', content: 'I want to start a dungeon adventure.' }
       ];
       
@@ -110,7 +100,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
           {
             role: 'assistant',
             content: data.response.state,
-            imageUrl: data.response.imageUrl,
             imageData: data.response.imageData,
           },
         ],
@@ -156,7 +145,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
           {
             role: 'assistant',
             content: data.response.state,
-            imageUrl: data.response.imageUrl,
             imageData: data.response.imageData,
           },
         ],
@@ -210,7 +198,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
           {
             role: 'assistant',
             content: data.response.state,
-            imageUrl: data.response.imageUrl,
             imageData: data.response.imageData,
           },
         ],

@@ -4,6 +4,7 @@ import { CoreMessage } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
 import { generateObject } from 'ai';
 import { ResponseSchema, GameStateSchema } from '@/lib/schemas';
+import { GAME_IMAGE_PROMPT, GAME_SYSTEM_PROMPT } from '@/lib/prompts';
 
 // OpenAI client setup
 const model = "grok-3-beta";
@@ -14,6 +15,7 @@ const client = createOpenAI({
 
 // Add image generation function
 async function generateImage(prompt: string) {
+  const imagePrompt = GAME_IMAGE_PROMPT + " " + prompt
   try {
     const response = await fetch("https://api.x.ai/v1/images/generations", {
       method: "POST",
@@ -23,7 +25,7 @@ async function generateImage(prompt: string) {
       },
       body: JSON.stringify({
         model: "grok-2-image",
-        prompt: prompt,
+        prompt: imagePrompt,
         response_format: "b64_json",
         n: 1
       })
@@ -47,25 +49,16 @@ export async function POST(req: Request) {
   try {
     const { messages, gameState } = await req.json();
     
-    const systemPrompt = `You are running a text-based dungeon adventure game.
-    For each turn, provide a narrative description of what the player sees or experiences,
-    and 3 options for what they can do next. Some options should advance the story, while others might lead to danger or rewards. 
-    One of the options will result in the user's death, which will end the game. Do not share it in the state description.
-    
-    The game should have a variety of possible endings with different scores.
-    Be creative with the story and include challenges, puzzles, and interesting choices.`;
-    
     const {object} = await generateObject({
       model: client(model),
       messages,
-      system: systemPrompt,
+      system: GAME_SYSTEM_PROMPT,
       schema: ResponseSchema,
       temperature: 0.7,
     });
 
     // Generate an image based on the current game state
-    const imagePrompt = `Fantasy illustration of a dungeon adventure scene: ${object.state}`;
-    const imageData = await generateImage(imagePrompt);
+    const imageData = await generateImage(object.imagePrompt);
     
     // Include the image URL in the object response
     const responseWithImage = {

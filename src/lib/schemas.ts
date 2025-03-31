@@ -16,7 +16,8 @@ export const ActionSchema = z.object({
 
 // Simplified schema for structured AI response
 export const ResponseSchema = z.object({
-  state: z.string().describe('The current game state description for the user to read'),
+  imagePrompt: z.string().describe('A prompt for an image generator to create an image of the current game state'),
+  state: z.string().describe('The current game state narrative for the user to read'),
   options: z.array(ActionSchema).min(1).max(4).describe('Available actions for the user to choose from'),
   // The imageUrl will be added after generation, not from the AI response
 });

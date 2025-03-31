@@ -61,10 +61,10 @@ export default function Chat() {
                 </div>
                 
                 {/* Show image if available (for assistant messages only) */}
-                {message.role === 'assistant' && (message.imageUrl || message.imageData) && (
+                {message.role === 'assistant' && ( message.imageData) && (
                   <div className="mt-3">
                     <img 
-                      src={message.imageData ? `data:image/jpeg;base64,${message.imageData}` : message.imageUrl}
+                      src={`data:image/jpeg;base64,${message.imageData}`}
                       alt="Scene illustration" 
                       className="rounded-md w-full shadow-md hover:shadow-lg transition-shadow duration-200"
                     />
@@ -75,7 +75,7 @@ export default function Chat() {
           </div>
           
           {/* Game options */}
-          {currentResponse && currentResponse.options && currentResponse.options.length > 0 && !isGameOver && (
+          {currentResponse && currentResponse.options && currentResponse.options.length > 0 && !isGameOver && !isLoading && (
             <div className="mt-6 flex flex-col space-y-2">
               <h3 className="text-lg font-semibold">Choose your next action:</h3>
               {currentResponse.options.map((option) => (
