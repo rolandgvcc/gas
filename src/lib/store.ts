@@ -3,9 +3,14 @@ import { type CoreMessage } from 'ai';
 import { type GameResponse, GameStateSchema, GameStatus } from '@/lib/schemas';
 
 // Define the store state type
+interface GameMessage extends CoreMessage {
+  imageUrl?: string;
+  imageData?: string;
+}
+
 interface GameStore {
   // State
-  messages: CoreMessage[];
+  messages: GameMessage[];
   input: string;
   gameState: {
     currentEpisode: number;
@@ -22,8 +27,8 @@ interface GameStore {
 
   // Actions
   setInput: (input: string) => void;
-  setMessages: (messages: CoreMessage[]) => void;
-  addMessage: (message: CoreMessage) => void;
+  setMessages: (messages: GameMessage[]) => void;
+  addMessage: (message: GameMessage) => void;
   setCurrentResponse: (response: GameResponse | null) => void;
   setGameOver: (isOver: boolean) => void;
   setLoading: (loading: boolean) => void;
@@ -73,7 +78,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   // Complex actions
   startGame: async () => {
     try {
-      const newMessages: CoreMessage[] = [
+      const newMessages: GameMessage[] = [
         { role: 'user', content: 'I want to start a dungeon adventure.' }
       ];
       
@@ -96,7 +101,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       
       const data = await response.json();
       
-      // Update state with full response data including gameState
+      // Update state with full response data including image
       set((state) => ({
         gameState: data.gameState,
         currentResponse: data.response,
@@ -105,6 +110,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
           {
             role: 'assistant',
             content: data.response.state,
+            imageUrl: data.response.imageUrl,
+            imageData: data.response.imageData,
           },
         ],
       }));
@@ -149,6 +156,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
           {
             role: 'assistant',
             content: data.response.state,
+            imageUrl: data.response.imageUrl,
+            imageData: data.response.imageData,
           },
         ],
       }));
@@ -201,6 +210,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
           {
             role: 'assistant',
             content: data.response.state,
+            imageUrl: data.response.imageUrl,
+            imageData: data.response.imageData,
           },
         ],
         // Set game over if option leads to end

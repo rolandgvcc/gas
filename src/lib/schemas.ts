@@ -18,6 +18,7 @@ export const ActionSchema = z.object({
 export const ResponseSchema = z.object({
   state: z.string().describe('The current game state description for the user to read'),
   options: z.array(ActionSchema).min(1).max(4).describe('Available actions for the user to choose from'),
+  // The imageUrl will be added after generation, not from the AI response
 });
 
 // Minimal game state for tracking progress
