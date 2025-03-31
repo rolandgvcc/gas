@@ -24,13 +24,20 @@ export default function Chat() {
     startGame,
     handleUserInput,
     handleOptionSelect,
-    resetGame
+    resetGame,
+    preGeneratedResponses,
+    selectedOptionId
   } = useGameStore();
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     handleUserInput(input);
   };
+  
+  // Calculate pre-generation progress
+  const preGenerationProgress = currentResponse?.options ? 
+    currentResponse.options.filter(opt => preGeneratedResponses[opt.id]).length / 
+    currentResponse.options.length : 0;
   
   return (    
     <div className="group w-full overflow-auto">
@@ -82,27 +89,18 @@ export default function Chat() {
                 <Button
                   key={option.id}
                   onClick={() => handleOptionSelect(option)}
-                  disabled={isLoading}
-                  className="text-left justify-start h-auto py-3 px-4"
+                  disabled={isLoading || selectedOptionId === option.id}
+                  className={`text-left justify-start h-auto py-3 px-4 ${
+                    selectedOptionId === option.id ? 'bg-primary/20' : ''
+                  }`}
                   variant="outline"
                 >
                   {option.action}
+                  {selectedOptionId === option.id && (
+                    <span className="ml-2 animate-pulse">...</span>
+                  )}
                 </Button>
               ))}
-            </div>
-          )}
-          
-          {/* Display game over message if applicable */}
-          {isGameOver && (
-            <div className="mt-6 p-4 border border-primary/20 bg-primary/5 rounded-lg text-center">
-              <h3 className="font-bold text-lg mb-2">Game Over</h3>
-              <p>Your adventure has ended after {gameState.currentEpisode} episodes.</p>
-              <Button 
-                onClick={resetGame}
-                className="mt-4 h-300"
-              >
-                Start New Adventure
-              </Button>
             </div>
           )}
         </div>
